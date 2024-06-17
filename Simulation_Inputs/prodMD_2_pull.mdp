@@ -1,0 +1,93 @@
+title                    = MD
+; Run parameters
+integrator               = md              ; leap-frog integrator
+nsteps                   = 165000000       ; 2 * 165000000 = 330 ns
+dt                       = 0.002           ; 2 fs
+; Output control
+nstxout                  = 0               ; save coordinates every 4 ps
+nstvout                  = 0               ; save velocities every 40 ps
+nstenergy                = 1000            ; save energies every 40 ps
+nstlog                   = 1000            ; update log file every 4 ps
+nstxout-compressed       = 1000            ; write xtc coordinates every 4 ps
+compressed-x-precision   = 1000
+;
+cutoff-scheme           = Verlet
+nstlist                 = 10               ; changed by cmi
+rlist                   = 1.2
+coulombtype             = pme
+rcoulomb                = 1.2
+vdwtype                 = Cut-off
+vdw-modifier            = Force-switch
+rvdw_switch             = 1.0
+rvdw                    = 1.2
+;
+tcoupl                  = Nose-Hoover
+tc_grps                 = PROT   MEMB   SOL_ION
+tau_t                   = 1.0    1.0    1.0
+ref_t                   = 310 310 310
+;
+pcoupl                  = Parrinello-Rahman
+pcoupltype              = semiisotropic
+tau_p                   = 10 ; changed by CMI
+compressibility         = 4.5e-5  4.5e-5
+ref_p                   = 1.0     1.0
+;
+constraints             = h-bonds
+constraint_algorithm    = LINCS
+continuation            = yes
+;
+nstcomm                 = 100
+comm_mode               = linear
+comm_grps               = PROT   MEMB   SOL_ION
+;
+refcoord_scaling        = com
+; Periodic boundary conditions
+pbc                      = xyz             ; 3-D PBC
+periodic-molecules       = no
+; Electric fields
+; COMMENTED OUT electric-field-z         = -0.03 0 0 0     ; apply an electric field in the z-direction
+; Distance restraints using Pull code
+pull                     = yes
+pull-ngroups             = 4
+pull-ncoords             = 4
+pull-group1-name         = TH_A            ; the TRP helix
+pull-group2-name         = TH_B
+pull-group3-name         = TH_C
+pull-group4-name         = TH_D
+pull-pbc-ref-prev-step-com = yes
+pull-group1-pbcatom      = 5289            ; the C-alpha of the LG
+pull-group2-pbcatom      = 11432
+pull-group3-pbcatom      = 23718
+pull-group4-pbcatom      = 17575
+pull-coord1-geometry     = distance        ; simple distance increase
+pull-coord2-geometry     = distance
+pull-coord3-geometry     = distance
+pull-coord4-geometry     = distance
+pull-coord1-type         = umbrella        ; COM pulling using a harmonic potential
+pull-coord2-type         = umbrella
+pull-coord3-type         = umbrella
+pull-coord4-type         = umbrella
+pull-coord1-groups       = 1 2
+pull-coord2-groups       = 2 3
+pull-coord3-groups       = 3 4
+pull-coord4-groups       = 4 1
+pull-coord1-dim          = Y Y Y            ; selecting all three cartesion dimensions
+pull-coord2-dim          = Y Y Y
+pull-coord3-dim          = Y Y Y
+pull-coord4-dim          = Y Y Y
+pull-coord1-rate         = 0.0              ; not pulling, just distance restraints
+pull-coord2-rate         = 0.0
+pull-coord3-rate         = 0.0
+pull-coord4-rate         = 0.0
+pull-coord1-k            = 1000             ; kJ mol^-1 nm^-2
+pull-coord2-k            = 1000
+pull-coord3-k            = 1000
+pull-coord4-k            = 1000
+pull-coord1-start        = yes              ; define initial COM distance
+pull-coord2-start        = yes
+pull-coord3-start        = yes
+pull-coord4-start        = yes
+pull-coord1-init         = 0
+pull-coord2-init         = 0
+pull-coord3-init         = 0
+pull-coord4-init         = 0

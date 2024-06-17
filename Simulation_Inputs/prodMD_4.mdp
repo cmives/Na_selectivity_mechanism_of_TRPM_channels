@@ -1,0 +1,48 @@
+title                    = MD
+; Run parameters
+integrator               = md              ; leap-frog integrator
+nsteps                   = 82500000        ; 4 * 82500000 = 330 ns
+dt                       = 0.004           ; 4 fs
+; Output control
+nstxout                  = 0               ; save coordinates every 4 ps
+nstvout                  = 0               ; save velocities every 40 ps
+nstenergy                = 1000            ; save energies every 40 ps
+nstlog                   = 1000            ; update log file every 4 ps
+nstxout-compressed       = 1000            ; write xtc coordinates every 4 ps
+compressed-x-precision   = 1000
+;
+cutoff-scheme           = Verlet
+nstlist                 = 10               ; changed by cmi
+rlist                   = 1.2
+coulombtype             = pme
+rcoulomb                = 1.2
+vdwtype                 = Cut-off
+vdw-modifier            = Force-switch
+rvdw_switch             = 1.0
+rvdw                    = 1.2
+;
+tcoupl                  = Nose-Hoover
+tc_grps                 = PROT   MEMB   SOL_ION
+tau_t                   = 1.0    1.0    1.0
+ref_t                   = 310 310 310
+;
+pcoupl                  = Parrinello-Rahman
+pcoupltype              = semiisotropic
+tau_p                   = 5.0
+compressibility         = 4.5e-5  4.5e-5
+ref_p                   = 1.0     1.0
+;
+constraints             = h-bonds
+constraint_algorithm    = LINCS
+continuation            = yes
+;
+nstcomm                 = 100
+comm_mode               = linear
+comm_grps               = PROT   MEMB   SOL_ION
+;
+refcoord_scaling        = com
+; Periodic boundary conditions
+pbc                      = xyz             ; 3-D PBC
+periodic-molecules       = no
+; Electric fields
+electric-field-z         = -0.03 0 0 0     ; apply an electric field in the z-direction
